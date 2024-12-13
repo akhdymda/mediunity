@@ -5,9 +5,11 @@ import speech_recognition as sr # 音声認識の機能をインポート
 from audio_recorder_streamlit import audio_recorder # streamlit内でオーディオを録音するための機能をインポート
 import wave # WAV形式のオーディオファイルを動かすための機能をインポート
 import time
+import datetime 
 
 # 利用者リストの作成
 set_customer_list = {
+    '利用者を選択してください':'00',
     '山田太郎': 'yt',
     '鈴木一郎': 'st',
     '田中次郎': 'tj',
@@ -15,6 +17,10 @@ set_customer_list = {
     '後藤新平': 'gs',
     '津田梅子': 'tu'
 }
+
+# 日付を文字列としてフォーマット
+today = datetime.datetime.now()  # 本日の日付を取得
+today_str = today.strftime("%Y-%m-%d")  # YYYY-MM-DD 形式の文字列に変換
 
 # streamlitで音声を録音するための関数を設定
 def recorder():
@@ -46,20 +52,30 @@ def summarize_text(input_text):
     responce = client.chat.completions.create(
         model= 'gpt-4o-mini',
         messages=[
-            {"role": "system", "content":'以下の文章300文字以内で要約して出力してください'},
+            {
+                "role": "system",
+                "content": '看護師が書く記録として使用しますので、以下の内容を中立的で客観的な文章で出力してください。'
+                           'なお、利用者氏名、日付（YYYY-MM-DD）、以下の記録の内容の順に出力してください。'
+                           '利用者氏名は' + set_customer + '様 、日付は' + today_str +
+                           'です。また、' + content_maxStr_to_gpt + '文字以内で出力してください'
+            },
             {"role": "user", "content": input_text}]
     )
     output_content = responce.choices[0].message.content.strip() # 返って来たレスポンスの内容はresponse.choices[0].message.content.strip()に格納されているので、これをoutput_contentに代入
     return output_content # 返って来たレスポンスの内容を返す
 
+
 # streamlitでフロントエンド側を作成
 st.title('ホカンサポ(仮)') # タイトルを表示
 st.header('利用者選択')
-set_customer = st.selectbox('記録を行う利用者を選択してください',set_customer_list.keys(), index=None, placeholder='利用者を選択')
+set_customer = st.selectbox('記録を行う利用者を選択してください',set_customer_list.keys(), index=0, placeholder='利用者を選択') 
 st.write('利用者名:', set_customer)
 
 # サイドバーにアップローダーを設定。wavファイルだけ許可する設定にする
 file_upload = st.sidebar.file_uploader("ここに音声認識したいファイルをアップロードしてください。", type=['wav'])
+
+# chatGPTに出力させる文字数
+content_maxStr_to_gpt = str(st.sidebar.slider('要約したい文字数を設定してください。', 100,1000,300))
 
 state_summary = st.empty() # 要約を示すための箱を用意
 
