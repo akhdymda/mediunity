@@ -6,6 +6,7 @@ from audio_recorder_streamlit import audio_recorder # streamlit内でオーデ�
 import wave # WAV形式のオーディオファイルを動かすための機能をインポート
 import time
 import datetime 
+from docx import Document # ワードファイルを生成するための機能をインポート
 
 # 利用者リストの作成
 set_customer_list = {
@@ -64,6 +65,12 @@ def summarize_text(input_text):
     output_content = responce.choices[0].message.content.strip() # 返って来たレスポンスの内容はresponse.choices[0].message.content.strip()に格納されているので、これをoutput_contentに代入
     return output_content # 返って来たレスポンスの内容を返す
 
+# 要約をワードに保存するための関数の設定
+def save_summary_to_word(summary, file_name='summary.docx'):
+    document = Document() # 空のドキュメントファイルを作成
+    document.add_heading('生成された要約', level=1) # 表題を追加
+    document.add_paragraph(summary) # テキストを追加
+    document.save(file_name)
 
 # streamlitでフロントエンド側を作成
 st.title('ホカンサポ(仮)') # タイトルを表示
@@ -90,6 +97,15 @@ if (file_upload != None): # ファイルアップロードされた場合、file
     st.success('要約結果:') # 表示を変更
     state_summary.empty() # 要約内容を入れるための箱を用意
     st.write(summarized_text) # メソッドから帰ってきた値を表示
+    # 要約をwordファイルに保存
+    save_option = st.radio(
+        'Wordファイルを保存しますか？',
+        ['はい', 'いいえ'],
+        index=None
+    )
+    if save_option == 'はい':
+        save_summary_to_word(summarized_text)
+        st.write('保存が完了しました！')
 
 # wisperによる音声認識の表示
 contents = recorder() # contentsにrecorderメソッドを代入
@@ -124,3 +140,12 @@ else: # contentsが空でない場合＝音声が入力された場合の表示�
     st.success('要約結果') # 表示を変更 
     state_summary.empty()# 要約内容を入れるための箱を用意
     st.write(summarized_text) # メソッドから帰ってきた値を表示
+    # 要約をwordファイルに保存
+    save_option = st.radio(
+        'Wordファイルを保存しますか？',
+        ['はい', 'いいえ'],
+        index=None
+    )
+    if save_option == 'はい':
+        save_summary_to_word(summarized_text)
+        st.write('保存が完了しました！')
