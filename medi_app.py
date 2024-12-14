@@ -12,7 +12,7 @@ OpenAI.api_key = os.environ['OPENAI_API_KEY'] # 環境変数化したAPIキー�
 client = OpenAI() # openAIの機能をclientに代入
 
 # streamlitでフロントエンド側を作成
-st.title('ホカンサポ') # タイトルを表示
+st.title('ホカンサポ／訪問記録作成用') # タイトルを表示
 st.header('利用者選択')
 set_customer = st.selectbox('記録を行う利用者を選択してください',SET_CUSTOMER_LIST.keys(), index=0, placeholder='利用者を選択') 
 st.write('利用者名:', set_customer)
