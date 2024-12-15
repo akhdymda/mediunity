@@ -19,7 +19,6 @@ st.write('利用者名:', set_customer)
 
 # サイドバーにアップローダーを設定。wavファイルだけ許可する設定にする
 file_upload = st.sidebar.file_uploader("ここに音声認識したいファイルをアップロードしてください。", type=['wav'])
-
 # chatGPTに出力させる文字数
 content_maxStr_to_gpt = str(st.sidebar.slider('要約したい文字数を設定してください。', 100,1000,300))
 
@@ -32,7 +31,7 @@ if (file_upload != None): # ファイルアップロードされた場合、file
     st.audio(file_upload) # アップロードした音声をきける形で表示
     with st.spinner('要約中'):
         time.sleep(5)
-        summarized_text = summarize_text(result_text) # ChatGPTを使って要約の実行
+        summarized_text = summarize_text(result_text, set_customer, content_maxStr_to_gpt) # ChatGPTを使って要約の実行
     st.success('要約結果:') # 表示を変更
     state_summary.empty() # 要約内容を入れるための箱を用意
     st.write(summarized_text) # メソッドから帰ってきた値を表示
