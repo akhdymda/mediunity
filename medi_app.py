@@ -36,14 +36,13 @@ if (file_upload != None): # ファイルアップロードされた場合、file
     state_summary.empty() # 要約内容を入れるための箱を用意
     st.write(summarized_text) # メソッドから帰ってきた値を表示
     # 要約をwordファイルに保存
-    save_option = st.radio(
-        'Wordファイルを保存しますか？',
-        ['はい', 'いいえ'],
-        index=None
+    word_file = save_summary_to_word(summarized_text)
+    st.download_button(
+        label='Wordファイルに保存',
+        data=word_file,
+        file_name='summary.docx',
+        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
-    if save_option == 'はい':
-        save_summary_to_word(summarized_text)
-        st.write('保存が完了しました！')
 
 # wisperによる音声認識の表示
 contents = recorder() # contentsにrecorderメソッドを代入
@@ -79,11 +78,10 @@ else: # contentsが空でない場合＝音声が入力された場合の表示�
     state_summary.empty()# 要約内容を入れるための箱を用意
     st.write(summarized_text) # メソッドから帰ってきた値を表示
     # 要約をwordファイルに保存
-    save_option = st.radio(
-        'Wordファイルを保存しますか？',
-        ['はい', 'いいえ'],
-        index=None
+    word_file = save_summary_to_word(summarized_text)
+    st.download_button(
+        label='Wordファイルに保存',
+        data=word_file,
+        file_name='summary.docx',
+        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
-    if save_option == 'はい':
-        save_summary_to_word(summarized_text)
-        st.write('保存が完了しました！')
