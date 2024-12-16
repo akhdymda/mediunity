@@ -8,7 +8,7 @@ from customer_list import SET_CUSTOMER_LIST
 from record_utils import recorder, file_speech_to_text, summarize_text
 
 # whisper利用のためのコード
-api_key = st.secrets['opneai']['api_key']
+api_key = st.secrets['openai']['api_key']
 openai.api_key = api_key # openAIの機能をclientに代入
 
 # streamlitでフロントエンド側を作成

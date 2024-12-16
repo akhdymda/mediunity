@@ -6,7 +6,7 @@ import pandas as pd
 from customer_list import SET_CUSTOMER_LIST
 
 # OpenAI APIキーの設定
-api_key = st.secrets['opneai']['api_key']
+api_key = st.secrets['openai']['api_key']
 openai.api_key = api_key  # 環境変数化したAPIキーの読み込み
 
 # 今日の日付

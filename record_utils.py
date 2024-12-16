@@ -28,7 +28,7 @@ def file_speech_to_text(audio_file):
     return text # 認識した文字を返す
 
 # 音声認識した内容を要約する機能の設定
-api_key = st.secrets['opneai']['api_key']
+api_key = st.secrets['openai']['api_key']
 openai.api_key = api_key # openAIの機能をclientに代入
 
 # chatGPTにリクエストするための関数を設定。引数には書いてほしい内容と最大文字数を指定
