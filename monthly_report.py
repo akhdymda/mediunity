@@ -1,15 +1,13 @@
 import streamlit as st
-from openai import OpenAI
+import openai
 import os
 import datetime
 import pandas as pd
 from customer_list import SET_CUSTOMER_LIST
 
 # OpenAI APIキーの設定
-OpenAI.api_key = os.environ['OPENAI_API_KEY']  # 環境変数化したAPIキーの読み込み
-
-# OpenAIクライアントの初期化
-client = OpenAI()
+api_key = st.secrets['opneai']['api_key']
+openai.api_key = api_key  # 環境変数化したAPIキーの読み込み
 
 # 今日の日付
 today = datetime.date.today()
@@ -53,7 +51,7 @@ def run_gpt(user_input):
         "3. 家庭での介護の状況: 家族が介護をしているのか、家族の状態などを記載してください。\n\n"
         "各項目を独立して、中立的かつ客観的な文章で記載してください。"
     )
-    response = client.chat.completions.create(
+    response = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": request_to_gpt}],
     )

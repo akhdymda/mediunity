@@ -1,5 +1,5 @@
 import streamlit as st # フロントエンドを扱うstreamlitをインポート
-from openai import OpenAI # 音声認識で利用するOpenAIをインポート
+import openai # 音声認識で利用するOpenAIをインポート
 import os # 環境変数にしたopenai apiキーを呼び出すための機能をインポート
 import wave # WAV形式のオーディオファイルを動かすための機能をインポート
 import time
@@ -8,8 +8,8 @@ from customer_list import SET_CUSTOMER_LIST
 from record_utils import recorder, file_speech_to_text, summarize_text
 
 # whisper利用のためのコード
-OpenAI.api_key = os.environ['OPENAI_API_KEY'] # 環境変数化したAPIキーの読み込み
-client = OpenAI() # openAIの機能をclientに代入
+api_key = st.secrets['opneai']['api_key']
+openai.api_key = api_key # openAIの機能をclientに代入
 
 # streamlitでフロントエンド側を作成
 st.title('ホカンサポ／訪問記録作成用') # タイトルを表示
@@ -63,7 +63,7 @@ else: # contentsが空でない場合＝音声が入力された場合の表示�
         audio_file= open("./audio.wav", "rb")
 
     # wisperで音声データをテキストに変換。transcriptionに代入。wisperモデルはwhisper-1を使用
-    transcription = client.audio.transcriptions.create(
+    transcription = openai.audio.transcriptions.create(
     model="whisper-1", 
     file=audio_file,
     )
